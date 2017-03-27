@@ -12,6 +12,8 @@ import { combineEpics } from 'redux-observable';
  *  decoupled from this code.
  */
 
+require("./d3epics");
+
 const rootEpic = combineEpics();
 
 export default rootEpic
