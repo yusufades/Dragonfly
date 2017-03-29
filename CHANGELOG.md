@@ -8,12 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unrelease]
 
 ### Added
- - Initialised repo using create-react-app
- - Hooked up reducers and epics (empty)
- - Added program state
- - Added graphFactory
- - Added addTriplet endpoint to the graphFactory
 
+ - Added graph resize feature
+ - Added addTriplet endpoint to the graphFactory
+ - Added graphFactory
+ - Added program state
+ - Hooked up reducers and epics (empty)
+ - Initialised repo using create-react-app
 
 ### Changed
 
