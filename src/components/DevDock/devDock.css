@@ -1,0 +1,21 @@
+
+
+#devDock {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: lightgrey;
+    text-align: center;
+}
+
+#devDock div {
+    display: inline-block;
+    margin: 20px;
+}
+
+label {
+    padding: 10px;
+}
+button {
+    margin-bottom: 20px;
+}

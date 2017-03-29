@@ -24,10 +24,15 @@ let store = createStore(rootReducer,
             applyMiddleware(epicMiddleWare, logger));
 
 
+/**
+ * Import components
+ */
+import {DevDock} from './components/DevDock/DevDock';
+
 
 ReactDOM.render(
   <Provider store={store}>
-    <div></div>
+    <DevDock />
   </Provider>,
   document.getElementById('root')
 );
