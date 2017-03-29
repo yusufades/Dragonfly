@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unrelease]
 
 ### Added
+
+ - Stopped Graph Jumping (handleDisconnect to false)
  - Added addTriplet epic
  - Added devDock for testing features (addTriplet)
  - Added graph resize feature

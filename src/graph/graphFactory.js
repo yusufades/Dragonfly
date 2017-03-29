@@ -41,6 +41,7 @@ const graphFactory = (documentId) => {
                 .attr("viewBox", `0 0 ${width} ${height}`)
                 .classed("svg-content-responsive", true);
 
+
     /**
      * Set up [webcola](http://marvl.infotech.monash.edu/webcola/).
      * Later we'll be restarting the simulation whenever we mutate
@@ -49,7 +50,7 @@ const graphFactory = (documentId) => {
     let simulation = cola.d3adaptor(d3)
                          .avoidOverlaps(true)
                          .jaccardLinkLengths(50)
-                         .handleDisconnected(true)
+                         .handleDisconnected(false) // THIS MUST BE FALSE OR GRAPH JUMPS
                          .size([width, height])
                          .nodes(nodes)
                          .links(links)
