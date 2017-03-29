@@ -29,13 +29,17 @@ const graphFactory = (documentId) => {
     let nodes = [];
     let links = [];
 
-    const width = 300,
-          height = 300;
+    const width = 600,
+          height = 400;
     
+    // Here we are creating a responsive svg element.
     let svg = d3.select(`#${documentId}`)
+                .append("div")
+                .classed("svg-container", true)
                 .append("svg")
-                .attr("width", width)
-                .attr("height", height);
+                .attr("preserveAspectRatio", "xMinYMin meet")
+                .attr("viewBox", `0 0 ${width} ${height}`)
+                .classed("svg-content-responsive", true);
 
     /**
      * Set up [webcola](http://marvl.infotech.monash.edu/webcola/).
