@@ -5,7 +5,7 @@ import './devDock.css';
 /**
  * Import actions here
  */
-import { addTriplet } from '../../actions/d3actions';
+import { addTriplet, removeNodeHash } from '../../actions/d3actions';
 
 const devDock = React.createClass({
     getInitialState: function(){
@@ -32,6 +32,7 @@ const devDock = React.createClass({
                 </div>
             </div>
             <button onClick={() => {this.props.addTriplet(this.state.subject, this.state.predicate, this.state.object)}}>Add Triplet</button>
+            <button onClick={() => {this.props.removeNodeHash(this.state.subject)}}>Remove Node (from subject input)</button>
         </div>
     }
 });
@@ -43,6 +44,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     addTriplet: (subjectHash, predicateType, objectHash) => dispatch(addTriplet(
         {hash: subjectHash}, {type: predicateType}, {hash: objectHash})),
+    removeNodeHash: nodeHash => dispatch(removeNodeHash(nodeHash)),
 });
 
 export const DevDock = connect(

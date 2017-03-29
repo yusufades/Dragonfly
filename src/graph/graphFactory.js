@@ -218,9 +218,54 @@ const graphFactory = (documentId) => {
             createNewLinks();
         });
     }
+    /**
+     * Removes the node and all triplets associated with it.
+     * @param {String} nodeHash hash of the node to remove.
+     */
+    function removeNode(nodeHash){
+        tripletsDB.get({subject: nodeHash}, function(err, l1){
+            if (err){
+                return console.error(err)
+            }
+            tripletsDB.get({object: nodeHash}, function(err, l2){
+                if (err){
+                    return console.error(err)
+                }
+                // Check if the node exists
+                if (l1.length + l2.length === 0){
+                    return console.error("There was nothing to remove")
+                }
+
+                [...l1, ...l2].forEach(triplet => tripletsDB.del(triplet, function(err){
+                    if (err){
+                        return console.error(err);
+                    }
+                }));
+
+
+                // Remove the node
+                let nodeIndex = -1;
+                for (let i = 0; i < nodes.length; i++){
+                    if (nodes[i].hash === nodeHash){
+                        nodeIndex = i;
+                        break;
+                    }
+                }
+                if (nodeIndex === -1){
+                    return console.error("There is no node");
+                }
+
+                nodeMap.delete(nodeHash);
+                nodes.splice(nodeIndex, 1);
+
+                createNewLinks();
+            });
+        });
+    }
 
     return {
-        addTriplet
+        addTriplet,
+        removeNode
     }
 }
 

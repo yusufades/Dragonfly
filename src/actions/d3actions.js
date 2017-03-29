@@ -15,6 +15,7 @@
 export const ADD_TRIPLET = "d3actions/ADD_TRIPLET";
 const REMOVE_TRIPLET = "d3actions/REMOVE_TRIPLET";
 const REMOVE_NODE = "d3actions/REMOVE_NODE";
+export const REMOVE_NODE_HASH = "d3actions/REMOVE_NODE_HASH";
 const REMOVE_ALL_NODES = "d3actions/REMOVE_ALL_NODES";
 
 /**
@@ -53,11 +54,17 @@ export const removeTriplet = (subject, predicate, object) => ({
  * removeNode removes the node passed in,
  * and also all triplets (edges) to and from
  * the node.
+ * Uses removeNodeHash
  * @param {object} nodeObject is the node to remove
  */
 export const removeNode = (nodeObject) => ({
-    node: nodeObject,
-    type: REMOVE_NODE
+    nodeHash: nodeObject.hash,
+    type: REMOVE_NODE_HASH
+});
+
+export const removeNodeHash = (nodeHash) => ({
+    nodeHash,
+    type: REMOVE_NODE_HASH
 });
 
 /**
