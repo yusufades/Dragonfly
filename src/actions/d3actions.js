@@ -12,7 +12,7 @@
  */
 
 
-const ADD_TRIPLET = "d3actions/ADD_TRIPLET";
+export const ADD_TRIPLET = "d3actions/ADD_TRIPLET";
 const REMOVE_TRIPLET = "d3actions/REMOVE_TRIPLET";
 const REMOVE_NODE = "d3actions/REMOVE_NODE";
 const REMOVE_ALL_NODES = "d3actions/REMOVE_ALL_NODES";
