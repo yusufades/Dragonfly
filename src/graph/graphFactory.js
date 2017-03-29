@@ -149,6 +149,15 @@ const graphFactory = (documentId) => {
     }
 
     function addTriplet(tripletObject){
+        /**
+         * Check that minimum requirements are met.
+         */
+        if (tripletObject === undefined) {
+            var e = new Error("TripletObject undefined");
+            console.error(e);
+            return
+        }
+
         // Node needs a unique hash associated with it.
         let subject = tripletObject.subject,
             predicate = tripletObject.predicate,
@@ -157,6 +166,28 @@ const graphFactory = (documentId) => {
         if (!(subject && predicate && object && true)){
             throw new Error("Triplets added need to include all three fields.")
         }
+
+        // Check that hash exists
+        if (!(subject.hash && object.hash)) {
+            var e = new Error("Subject and Object require a hash field.");
+            console.error(e);
+            return
+        }
+
+        // Check that type field exists on predicate
+        if (!predicate.type) {
+            var e = new Error("Predicate requires type field.");
+            console.error(e);
+            return
+        }
+
+        // Check that type field is a string on predicate
+        if (typeof predicate.type !== "string") {
+            var e = new Error("Predicate type field must be a string");
+            console.error(e);
+            return
+        }
+
 
         /**
          * Put the triplet into the LevelGraph database
