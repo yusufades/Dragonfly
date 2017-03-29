@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+ - Added dynamic node size
  - Added remove node by hash
  - Stopped Graph Jumping (handleDisconnect to false)
  - Added addTriplet epic

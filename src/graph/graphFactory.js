@@ -86,8 +86,7 @@ const graphFactory = (documentId) => {
      * Maps node and edge data to the visualisation.
      */
     function tick(){
-        node.attr("x", d => d.x)
-            .attr("y", d => d.y);
+        node.attr("transform", d => `translate(${d.x},${d.y})`)
         link.attr("d", d => {
             let dx = d.target.x - d.source.x,
                 dy = d.target.y - d.source.y,
@@ -107,13 +106,28 @@ const graphFactory = (documentId) => {
         node = node.data(nodes, d => d.index);
         node.exit().remove();
         node = node.enter()
-                   .append("rect")
-                   .attr("fill", "red")
-                   .attr("width", "30")
-                   .attr("height", "10")
+                   .append("g")
                    .call(simulation.drag)
                    .merge(node);
         
+        // Here we add node beauty.
+        // To fit nodes to the short-name calculate BBox
+        // from https://bl.ocks.org/mbostock/1160929
+        let text = node.append("text")
+                    .attr("x", 0)
+                    .attr("y", 20)
+                    .attr("dy", 0)
+                    .attr("text-anchor", "start")
+                    .style("font", "100 22px Helvetica Neue")
+                    .text(d => d.hash);
+        
+        // This trick from http://stackoverflow.com/a/27076107
+        // we get the bounding box from the parent (which contains the text)
+        node.insert("rect", "text")     // The second arg is what the rect will sit behind.
+                .attr("fill", "red")
+                .attr("width", function() { return this.parentNode.getBBox().width })
+                .attr("height", function() { return this.parentNode.getBBox().height })
+            
         /////// LINK ///////
         link = link.data(links, d => d.source.index + "-" + d.target.index)
         link.exit().remove();
