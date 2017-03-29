@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
  - Added addTriplet epic
- - Added devDock for testing features
+ - Added devDock for testing features (addTriplet)
  - Added graph resize feature
  - Added addTriplet endpoint to the graphFactory
  - Added graphFactory
