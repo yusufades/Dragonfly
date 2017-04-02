@@ -9,18 +9,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
- - Initial Node epic added
- - Mock API added
- - Added predicate edge color option (with marker color change)
- - Added dynamic node size
- - Added remove node by hash
+ - Initial Node d3 mutation - addNode
+ - Initial Node epic
+ - Mock API 
+ - Predicate edge color option (with marker color change)
+ - Dynamic node size
+ - Remove node by hash
  - Stopped Graph Jumping (handleDisconnect to false)
- - Added addTriplet epic
- - Added devDock for testing features (addTriplet)
- - Added graph resize feature
- - Added addTriplet endpoint to the graphFactory
- - Added graphFactory
- - Added program state
+ - addTriplet epic
+ - devDock for testing features (addTriplet)
+ - Graph resize feature
+ - addTriplet endpoint to the graphFactory
+ - graphFactory
+ - Program state
  - Hooked up reducers and epics (empty)
  - Initialised repo using create-react-app
 

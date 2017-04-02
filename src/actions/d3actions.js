@@ -43,11 +43,11 @@ export const addTriplet = (subject, predicate, object) => ({
  * Adds a single node onto the graph.
  * Used for initiating the graph when it has
  * no nodes. (Or for nodes with no edges)
- * @param {object} nodeObject 
+ * @param {object} node 
  */
-export const addNode = (nodeObject) => ({
+export const addNode = (node) => ({
     type: ADD_NODE,
-    nodeObject
+    node
 });
 
 /**

@@ -129,7 +129,7 @@ const graphFactory = (documentId) => {
                     .attr("dy", 0)
                     .attr("text-anchor", "start")
                     .style("font", "100 22px Helvetica Neue")
-                    .text(d => d.hash);
+                    .text(d => d.shortname || d.hash);
         
         // This trick from http://stackoverflow.com/a/27076107
         // we get the bounding box from the parent (which contains the text)
@@ -316,7 +316,8 @@ const graphFactory = (documentId) => {
 
     return {
         addTriplet,
-        removeNode
+        removeNode,
+        addNode
     }
 }
 
