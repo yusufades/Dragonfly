@@ -100,8 +100,13 @@ const graphFactory = (documentId) => {
         link.attr("d", d => {
             let dx = d.target.x - d.source.x,
                 dy = d.target.y - d.source.y,
-                dr = Math.sqrt(dx * dx + dy * dy);
+                dr = Math.sqrt(dx * dx + dy * dy)
+                // mid_x = d.source.x + (dx/2),
+                // offset = 20,
+                // mid_y = d.source.y + Math.cos(Math.atan((offset * 2)/dx)) * Math.sqrt(offset * offset + (dx * dx/ 4));
+
             return "M"+d.source.x+","+d.source.y+"A"+dr+","+dr+" 0 0,1 "+d.target.x + ","+d.target.y;
+            // return `M ${d.source.x} ${d.source.y} Q 350 200 ${mid_x} ${mid_y} Q 450 200 ${d.target.x} ${d.target.y} `
         });
     }
 
