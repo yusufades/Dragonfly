@@ -13,9 +13,11 @@ import { combineEpics } from 'redux-observable';
  */
 
 import d3epics from './d3epics';
+import apiEpics from './apiEpics';
 
 const rootEpic = combineEpics(
-    d3epics
+    d3epics,
+    apiEpics
 );
 
 export default rootEpic

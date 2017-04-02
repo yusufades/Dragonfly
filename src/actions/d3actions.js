@@ -13,6 +13,7 @@
 
 
 export const ADD_TRIPLET = "d3actions/ADD_TRIPLET";
+export const ADD_NODE = "d3actions/ADD_NODE";
 const REMOVE_TRIPLET = "d3actions/REMOVE_TRIPLET";
 const REMOVE_NODE = "d3actions/REMOVE_NODE";
 export const REMOVE_NODE_HASH = "d3actions/REMOVE_NODE_HASH";
@@ -36,6 +37,17 @@ const REMOVE_ALL_NODES = "d3actions/REMOVE_ALL_NODES";
 export const addTriplet = (subject, predicate, object) => ({
     triplet: {subject, predicate, object},
     type: ADD_TRIPLET
+});
+
+/**
+ * Adds a single node onto the graph.
+ * Used for initiating the graph when it has
+ * no nodes. (Or for nodes with no edges)
+ * @param {object} nodeObject 
+ */
+export const addNode = (nodeObject) => ({
+    type: ADD_NODE,
+    nodeObject
 });
 
 /**

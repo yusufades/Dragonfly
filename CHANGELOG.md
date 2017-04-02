@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+ - Initial Node epic added
+ - Mock API added
  - Added predicate edge color option (with marker color change)
  - Added dynamic node size
  - Added remove node by hash

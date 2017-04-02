@@ -36,3 +36,9 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
+
+
+import {fetchInitialNode} from './actions/apiActions';
+setTimeout(() => {
+  store.dispatch(fetchInitialNode());
+}, 1000)

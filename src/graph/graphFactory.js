@@ -173,6 +173,23 @@ const graphFactory = (documentId) => {
         })
     }
 
+    function addNode(nodeObject){
+        // Check that hash exists
+        if (!(nodeObject.hash)) {
+            var e = new Error("Node requires a hash field.");
+            console.error(e);
+            return
+        }
+
+        // Add node to graph
+        if (!nodeMap.has(nodeObject.hash)){
+            // Set the node
+            nodes.push(nodeObject)
+            nodeMap.set(nodeObject.hash, nodeObject);
+        }
+        createNewLinks();
+    }
+
     function addTriplet(tripletObject){
         /**
          * Check that minimum requirements are met.
@@ -223,9 +240,6 @@ const graphFactory = (documentId) => {
             // Create an arrow head for the new color
             createColorMarker(defs, predicate.color);
         }
-
-        
-
 
         /**
          * Put the triplet into the LevelGraph database

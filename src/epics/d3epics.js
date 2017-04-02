@@ -7,7 +7,6 @@ import {ADD_TRIPLET, REMOVE_NODE_HASH} from '../actions/d3actions';
 import graphFactory from '../graph/graphFactory';
 
 const graph = graphFactory("d3-graph");
-console.log(graph);
 
 export const addTriplet = action$ =>
     action$.ofType(ADD_TRIPLET)
