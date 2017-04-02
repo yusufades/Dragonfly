@@ -8,12 +8,12 @@ import graphFactory from '../graph/graphFactory';
 
 const graph = graphFactory("d3-graph");
 
-export const addTriplet = action$ =>
+const addTriplet = action$ =>
     action$.ofType(ADD_TRIPLET)
         .do(({triplet}) => graph.addTriplet(triplet))
         .mergeMap(_ => Rx.Observable.empty());
 
-export const removeNodeHash = action$ =>
+const removeNodeHash = action$ =>
     action$.ofType(REMOVE_NODE_HASH)
         .do(({nodeHash}) => graph.removeNode(nodeHash))
         .mergeMap(_ => Rx.Observable.empty());
