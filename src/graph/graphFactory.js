@@ -25,6 +25,7 @@ const graphFactory = (documentId) => {
      * nodeMap allows hash lookup of nodes.
      */
     let nodeMap = new Map();
+    let predicateTypeToColorMap = new Map();
     let tripletsDB = levelgraph(level(`Userdb-${Math.random()*100}`));
     let nodes = [];
     let links = [];
@@ -59,21 +60,30 @@ const graphFactory = (documentId) => {
     /**
      * Here we define the arrow heads to be used later.
      * Each unique arrow head needs to be created.
-     * TODO: quantise colours and create enough arrow heads.
      */
-    let defs = svg.append("defs");
+    const defs = svg.append("defs");
 
-    defs.append("marker")
-        .attr("id","arrow")
-        .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 16)
-        .attr("refY", -1.5)
-        .attr("markerWidth", 6)
-        .attr("markerHeight", 6)
-        .attr("orient", "auto")
-        .append("path")
-            .attr("d", "M0,-5L10,0L0,5")
-            .attr("class","arrowHead");
+    /**
+     * Appends a new marker to the dom, for the new
+     * marker color.
+     * @param {defs DOMElement} definitionElement 
+     * @param {string} color valid css color string
+     */
+    const createColorMarker = (definitionElement, color) => {
+        definitionElement.append("marker")
+            .attr("id",`arrow-${color}`)
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 16)
+            .attr("refY", -1.5)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("fill", color)
+            .attr("orient", "auto")
+            .append("path")
+                .attr("d", "M0,-5L10,0L0,5")
+                .attr("class","arrowHead");
+    }
+    
     
     // Define svg groups
     let g = svg.append("g"),
@@ -136,9 +146,9 @@ const graphFactory = (documentId) => {
                    .append("path")
                    .attr("class", "line")
                    .attr("stroke-width", 2)
-                   .attr("stroke", "black") // Todo: change color based on predicate.
+                   .attr("stroke", d => predicateTypeToColorMap.get(d.predicate) || "black")
                    .attr("fill", "none")
-                   .attr("marker-end", `url(#arrow)`)   // This needs to change to the color.
+                   .attr("marker-end",d => `url(#arrow-${predicateTypeToColorMap.get(d.predicate)})`)   // This needs to change to the color.
                    .merge(link);
 
         // Restart the simulation.
@@ -202,6 +212,19 @@ const graphFactory = (documentId) => {
             console.error(e);
             return
         }
+        
+        /**
+         * If a predicate type already has a color,
+         * it is not redefined.
+         */
+        if (!predicateTypeToColorMap.has(predicate.type)){
+            predicateTypeToColorMap.set(predicate.type, predicate.color);
+
+            // Create an arrow head for the new color
+            createColorMarker(defs, predicate.color);
+        }
+
+        
 
 
         /**
