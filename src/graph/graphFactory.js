@@ -113,7 +113,8 @@ const graphFactory = (documentId) => {
         // To fit nodes to the short-name calculate BBox
         // from https://bl.ocks.org/mbostock/1160929
         let text = nodeEnter.append("text")
-                    .attr("dy", 0)
+                    .attr("dx", -10)
+                    .attr("dy", -2)
                     .attr("text-anchor", "middle")
                     .style("font", "100 22px Helvetica Neue")
                     .text(d => d.shortname || d.hash)
