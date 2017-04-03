@@ -381,7 +381,8 @@ const graphFactory = (documentId) => {
         addTriplet,
         removeNode,
         addNode,
-        setNodeToColor
+        setNodeToColor,
+        setSelectNode
     }
 }
 

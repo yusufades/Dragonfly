@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+ - Graph callback for selecting nodes
  - Node color option function
  - Edge Routing
  - Initial Node d3 mutation - addNode
