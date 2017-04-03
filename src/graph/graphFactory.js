@@ -136,7 +136,9 @@ const graphFactory = (documentId) => {
         node = node.merge(nodeEnter)
         node.insert("rect", "text")     // The second arg is what the rect will sit behind.
                 .classed("node", true)
-                .attr("fill", "red");
+                .attr("fill", "red")
+                .attr("rx", 5)
+                .attr("ry", 5);
             
         /////// LINK ///////
         link = link.data(links, d => d.source.index + "-" + d.target.index)
