@@ -52,8 +52,8 @@ const graphFactory = (documentId) => {
      */
     let simulation = cola.d3adaptor(d3)
                          .avoidOverlaps(true)
-                         .flowLayout('y', 500)
-                         .jaccardLinkLengths(500)
+                         .flowLayout('x', 150)
+                         .jaccardLinkLengths(150)
                          .handleDisconnected(false) // THIS MUST BE FALSE OR GRAPH JUMPS
                          .size([width, height])
                          .nodes(nodes)
@@ -75,8 +75,7 @@ const graphFactory = (documentId) => {
         definitionElement.append("marker")
             .attr("id",`arrow-${color}`)
             .attr("viewBox", "0 -5 10 10")
-            .attr("refX", 16)
-            .attr("refY", -1.5)
+            .attr("refX", 8)
             .attr("markerWidth", 6)
             .attr("markerHeight", 6)
             .attr("fill", color)
@@ -164,9 +163,7 @@ const graphFactory = (documentId) => {
          */
         const routeEdges = function () {
             simulation.prepareEdgeRouting();
-            link.attr("d", function(d){
-                return lineFunction(simulation.routeEdge(d));
-            });
+            link.attr("d", d => lineFunction(simulation.routeEdge(d)));
             if (isIE()) link.each(function (d) { this.parentNode.insertBefore(this, this) });
         }
         // Restart the simulation.
@@ -186,17 +183,6 @@ const graphFactory = (documentId) => {
             });
             if (isIE()) link.each(function (d) { this.parentNode.insertBefore(this, this) });
 
-            // link.attr("d", d => {
-            //     let dx = d.target.x - d.source.x,
-            //         dy = d.target.y - d.source.y,
-            //         dr = Math.sqrt(dx * dx + dy * dy)
-            //         // mid_x = d.source.x + (dx/2),
-            //         // offset = 20,
-            //         // mid_y = d.source.y + Math.cos(Math.atan((offset * 2)/dx)) * Math.sqrt(offset * offset + (dx * dx/ 4));
-
-            //     return "M"+d.source.x+","+d.source.y+"A"+dr+","+dr+" 0 0,1 "+d.target.x + ","+d.target.y;
-            //     // return `M ${d.source.x} ${d.source.y} Q 350 200 ${mid_x} ${mid_y} Q 450 200 ${d.target.x} ${d.target.y} `
-            // });
         }).on("end", routeEdges);
         function isIE() { return ((navigator.appName == 'Microsoft Internet Explorer') || ((navigator.appName == 'Netscape') && (new RegExp("Trident/.*rv:([0-9]{1,}[\.0-9]{0,})").exec(navigator.userAgent) != null))); }
     }
