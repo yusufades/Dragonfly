@@ -107,7 +107,9 @@ const graphFactory = (documentId) => {
                    .append("g")
                    .each(d => {d.createMargin = false})
                    .classed("node", true)
-                   .call(simulation.drag)
+                   .attr("cursor", "move")
+                   .call(simulation.drag);
+                   
         
         // Here we add node beauty.
         // To fit nodes to the short-name calculate BBox
@@ -147,9 +149,9 @@ const graphFactory = (documentId) => {
                    .append("path")
                    .attr("class", "line")
                    .attr("stroke-width", 2)
-                   .attr("stroke", d => predicateTypeToColorMap.get(d.predicate) || "black")
+                   .attr("stroke", d => predicateTypeToColorMap.get(d.edgeData.type) || "black")
                    .attr("fill", "none")
-                   .attr("marker-end",d => `url(#arrow-${predicateTypeToColorMap.get(d.predicate)})`)   // This needs to change to the color.
+                   .attr("marker-end",d => `url(#arrow-${predicateTypeToColorMap.get(d.edgeData.type)})`)   // This needs to change to the color.
                    .merge(link);
         
         /**
@@ -197,10 +199,10 @@ const graphFactory = (documentId) => {
                 throw new Error(err);
             }
             // Create edges based on LevelGraph triplets
-            links = l.map(({subject, predicate, object}) => {
+            links = l.map(({subject, object, edgeData}) => {
                 let source = nodeMap.get(subject);
                 let target = nodeMap.get(object);
-                return { source, target, predicate }
+                return { source, target, edgeData }
             });   
             restart()
         })
@@ -282,7 +284,8 @@ const graphFactory = (documentId) => {
         tripletsDB.put({
             subject: subject.hash,
             predicate: predicate.type,
-            object: object.hash
+            object: object.hash,
+            edgeData: predicate
         }, err => {
             if (err){
                 throw new Error(err);
