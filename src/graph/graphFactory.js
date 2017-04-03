@@ -52,8 +52,8 @@ const graphFactory = (documentId) => {
      */
     let simulation = cola.d3adaptor(d3)
                          .avoidOverlaps(true)
-                         .flowLayout('x', 150)
-                         .jaccardLinkLengths(150)
+                         .flowLayout('y', 500)
+                         .jaccardLinkLengths(500)
                          .handleDisconnected(false) // THIS MUST BE FALSE OR GRAPH JUMPS
                          .size([width, height])
                          .nodes(nodes)
@@ -128,17 +128,15 @@ const graphFactory = (documentId) => {
                         d.height = b.height + extra;
                         d.createMargin = !d.createMargin;
                     })
-                    .attr("x", 0)
-                    .attr("y", 0/**d => d.y + (margin + pad) / 2**/);
+                    .attr("x", d => d.width / 2)
+                    .attr("y", d => d.height / 2);
         
         // This trick from http://stackoverflow.com/a/27076107
         // we get the bounding box from the parent (which contains the text)
         node = node.merge(nodeEnter)
         node.insert("rect", "text")     // The second arg is what the rect will sit behind.
                 .classed("node", true)
-                .attr("fill", "red")
-                .attr("width", d => d.width)
-                .attr("height", d => d.height)
+                .attr("fill", "red");
             
         /////// LINK ///////
         link = link.data(links, d => d.source.index + "-" + d.target.index)
@@ -177,10 +175,11 @@ const graphFactory = (documentId) => {
             node.each(d => {
                     d.innerBounds = d.bounds.inflate(-margin);
                 })
-                .attr("transform", d => `translate(${d.innerBounds.x},${d.innerBounds.y})`)
+                .attr("transform", d => `translate(${d.innerBounds.x},${d.innerBounds.y})`);
+            node.select('rect')
                 .attr("width", d => d.innerBounds.width())
                 .attr("height", d => d.innerBounds.height());
-            
+
             link.attr("d", d => {
                 let route = cola.makeEdgeBetween(d.source.innerBounds, d.target.innerBounds, 5);
                 return lineFunction([route.sourceIntersection, route.arrowStart]);
