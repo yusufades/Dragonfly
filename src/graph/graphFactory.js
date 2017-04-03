@@ -26,7 +26,8 @@ const graphFactory = (documentId) => {
      */
     let options = {
         // Set this as a function that transforms the node -> color string
-        nodeToColor: undefined
+        nodeToColor: undefined,
+        clickNode: (node) => console.log("clicked", node),
     }
 
     /**
@@ -148,6 +149,11 @@ const graphFactory = (documentId) => {
                 .attr("ry", 5);
         
         node = node.merge(nodeEnter)
+
+        /**
+         * Rebind the handlers on the nodes.
+         */
+        node.on('click', options.clickNode)
 
         /////// LINK ///////
         link = link.data(links, d => d.source.index + "-" + d.target.index)
@@ -361,6 +367,15 @@ const graphFactory = (documentId) => {
     function setNodeToColor(nodeToColorFunc){
         options.nodeToColor = nodeToColorFunc;
     }
+
+    /**
+     * Function that fires when a node is clicked.
+     * @param {function} selectNodeFunc 
+     */
+    function setSelectNode(selectNodeFunc){
+        options.clickNode = selectNodeFunc;
+    }
+
 
     return {
         addTriplet,
