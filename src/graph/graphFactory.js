@@ -130,16 +130,15 @@ const graphFactory = (documentId) => {
                     })
                     .attr("x", d => d.width / 2)
                     .attr("y", d => d.height / 2);
-        
-        // This trick from http://stackoverflow.com/a/27076107
-        // we get the bounding box from the parent (which contains the text)
-        node = node.merge(nodeEnter)
-        node.insert("rect", "text")     // The second arg is what the rect will sit behind.
+
+        nodeEnter.insert("rect", "text")     // The second arg is what the rect will sit behind.
                 .classed("node", true)
                 .attr("fill", "red")
                 .attr("rx", 5)
                 .attr("ry", 5);
-            
+        
+        node = node.merge(nodeEnter)
+
         /////// LINK ///////
         link = link.data(links, d => d.source.index + "-" + d.target.index)
         link.exit().remove();
