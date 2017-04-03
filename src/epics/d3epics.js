@@ -8,6 +8,14 @@ import graphFactory from '../graph/graphFactory';
 
 const graph = graphFactory("d3-graph");
 
+// Set options for mock
+graph.setNodeToColor((node) => {
+    switch (node.kind){
+        case "function":
+            return "blue"
+    }
+})
+
 const addNode = action$ =>
     action$.ofType(ADD_NODE)
         .do(({node}) => graph.addNode(node))

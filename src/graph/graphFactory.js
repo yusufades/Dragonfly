@@ -22,6 +22,14 @@ const graphFactory = (documentId) => {
     }
 
     /**
+     *  Options
+     */
+    let options = {
+        // Set this as a function that transforms the node -> color string
+        nodeToColor: undefined
+    }
+
+    /**
      * nodeMap allows hash lookup of nodes.
      */
     let nodeMap = new Map();
@@ -135,7 +143,7 @@ const graphFactory = (documentId) => {
 
         nodeEnter.insert("rect", "text")     // The second arg is what the rect will sit behind.
                 .classed("node", true)
-                .attr("fill", "red")
+                .attr("fill", d => options.nodeToColor && options.nodeToColor(d) || "red")
                 .attr("rx", 5)
                 .attr("ry", 5);
         
@@ -350,10 +358,15 @@ const graphFactory = (documentId) => {
         });
     }
 
+    function setNodeToColor(nodeToColorFunc){
+        options.nodeToColor = nodeToColorFunc;
+    }
+
     return {
         addTriplet,
         removeNode,
-        addNode
+        addNode,
+        setNodeToColor
     }
 }
 
