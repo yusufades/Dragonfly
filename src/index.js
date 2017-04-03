@@ -23,16 +23,20 @@ const logger = createLogger();
 let store = createStore(rootReducer,
             applyMiddleware(epicMiddleWare, logger));
 
-
+window.store = store;
 /**
  * Import components
  */
 import {DevDock} from './components/DevDock/DevDock';
+import {Dragonfly} from './components/Dragonfly/Dragonfly';
 
 
 ReactDOM.render(
   <Provider store={store}>
+    <div>
+    <Dragonfly />
     <DevDock />
+    </div>
   </Provider>,
   document.getElementById('root')
 );

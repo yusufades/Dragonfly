@@ -8,13 +8,21 @@ import graphFactory from '../graph/graphFactory';
 
 const graph = graphFactory("d3-graph");
 
-// Set options for mock
+// MOCK OPTIONS
+// TODO: MOCK - change.
 graph.setNodeToColor((node) => {
     switch (node.kind){
         case "function":
             return "blue"
     }
 })
+
+/**
+ * DRAGONFLY ONLY OPTIONS:
+ * TODO: refactor somewhere else.
+ */
+import {selectNode} from '../actions/dragonflyActions';
+graph.setSelectNode((node) => window.store.dispatch(selectNode(node)))
 
 const addNode = action$ =>
     action$.ofType(ADD_NODE)

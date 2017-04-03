@@ -5,6 +5,7 @@ import './dragonfly.css';
 /**
  * Import actions here
  */
+import {getSelectedNode} from '../../reducers/dragonflyReducer';
 
 const dragonfly = React.createClass({
     getInitialState: function(){
@@ -12,12 +13,16 @@ const dragonfly = React.createClass({
         }
     },
     render: function(){
-        return <div id="dragonfly"></div>
+        return <div id="dragonfly">
+        <div id="left"></div>
+        <div id="center" key="2">{ this.props.selectedNode.hash }</div>
+        <div id="right"></div>
+        </div>
     }
 });
 
 const mapStateToProps = state => ({
-
+    selectedNode: getSelectedNode(state)
 });
 
 const mapDispatchToProps = dispatch => ({
