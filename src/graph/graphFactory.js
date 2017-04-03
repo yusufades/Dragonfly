@@ -30,8 +30,10 @@ const graphFactory = (documentId) => {
     let nodes = [];
     let links = [];
 
-    const width = 600,
-          height = 400;
+    const width = 900,
+          height = 600,
+          margin = 10,
+          pad = 12;
     
     // Here we are creating a responsive svg element.
     let svg = d3.select(`#${documentId}`)
@@ -50,12 +52,12 @@ const graphFactory = (documentId) => {
      */
     let simulation = cola.d3adaptor(d3)
                          .avoidOverlaps(true)
-                         .jaccardLinkLengths(50)
+                         .flowLayout('x', 150)
+                         .jaccardLinkLengths(150)
                          .handleDisconnected(false) // THIS MUST BE FALSE OR GRAPH JUMPS
                          .size([width, height])
                          .nodes(nodes)
-                         .links(links)
-                         .on("tick", tick);
+                         .links(links);
     
     /**
      * Here we define the arrow heads to be used later.
@@ -73,8 +75,7 @@ const graphFactory = (documentId) => {
         definitionElement.append("marker")
             .attr("id",`arrow-${color}`)
             .attr("viewBox", "0 -5 10 10")
-            .attr("refX", 16)
-            .attr("refY", -1.5)
+            .attr("refX", 8)
             .attr("markerWidth", 6)
             .attr("markerHeight", 6)
             .attr("fill", color)
@@ -90,25 +91,7 @@ const graphFactory = (documentId) => {
         link = g.append("g")
                 .selectAll(".link"),
         node = g.append("g")
-                .selectAll(".node");
-    
-    /**
-     * Maps node and edge data to the visualisation.
-     */
-    function tick(){
-        node.attr("transform", d => `translate(${d.x},${d.y})`)
-        link.attr("d", d => {
-            let dx = d.target.x - d.source.x,
-                dy = d.target.y - d.source.y,
-                dr = Math.sqrt(dx * dx + dy * dy)
-                // mid_x = d.source.x + (dx/2),
-                // offset = 20,
-                // mid_y = d.source.y + Math.cos(Math.atan((offset * 2)/dx)) * Math.sqrt(offset * offset + (dx * dx/ 4));
-
-            return "M"+d.source.x+","+d.source.y+"A"+dr+","+dr+" 0 0,1 "+d.target.x + ","+d.target.y;
-            // return `M ${d.source.x} ${d.source.y} Q 350 200 ${mid_x} ${mid_y} Q 450 200 ${d.target.x} ${d.target.y} `
-        });
-    }
+                .selectAll(".node")
 
     /**
      * restart function adds and removes nodes.
@@ -120,28 +103,42 @@ const graphFactory = (documentId) => {
 
         node = node.data(nodes, d => d.index);
         node.exit().remove();
-        node = node.enter()
+        let nodeEnter = node.enter()
                    .append("g")
+                   .each(d => {d.createMargin = false})
+                   .classed("node", true)
                    .call(simulation.drag)
-                   .merge(node);
         
         // Here we add node beauty.
         // To fit nodes to the short-name calculate BBox
         // from https://bl.ocks.org/mbostock/1160929
-        let text = node.append("text")
-                    .attr("x", 0)
-                    .attr("y", 20)
-                    .attr("dy", 0)
-                    .attr("text-anchor", "start")
+        let text = nodeEnter.append("text")
+                    .attr("dx", -10)
+                    .attr("dy", -2)
+                    .attr("text-anchor", "middle")
                     .style("font", "100 22px Helvetica Neue")
-                    .text(d => d.shortname || d.hash);
+                    .text(d => d.shortname || d.hash)
+                    .each(function(d){
+                        if (d.createMargin){
+                            return
+                        }
+                        const b = this.getBBox();
+                        const extra = 2 * margin + 2 * pad;
+                        d.width = b.width + extra;
+                        d.height = b.height + extra;
+                        d.createMargin = !d.createMargin;
+                    })
+                    .attr("x", d => d.width / 2)
+                    .attr("y", d => d.height / 2);
         
         // This trick from http://stackoverflow.com/a/27076107
         // we get the bounding box from the parent (which contains the text)
+        node = node.merge(nodeEnter)
         node.insert("rect", "text")     // The second arg is what the rect will sit behind.
+                .classed("node", true)
                 .attr("fill", "red")
-                .attr("width", function() { return this.parentNode.getBBox().width })
-                .attr("height", function() { return this.parentNode.getBBox().height })
+                .attr("rx", 5)
+                .attr("ry", 5);
             
         /////// LINK ///////
         link = link.data(links, d => d.source.index + "-" + d.target.index)
@@ -155,10 +152,42 @@ const graphFactory = (documentId) => {
                    .attr("fill", "none")
                    .attr("marker-end",d => `url(#arrow-${predicateTypeToColorMap.get(d.predicate)})`)   // This needs to change to the color.
                    .merge(link);
+        
+        /**
+         * Helper function for drawing the lines.
+         */
+        const lineFunction = d3.line()
+            .x(d => d.x)
+            .y(d => d.y);
 
+        /**
+         * Causes the links to bend around the rectangles.
+         * Source: https://github.com/tgdwyer/WebCola/blob/master/WebCola/examples/unix.html#L140
+         */
+        const routeEdges = function () {
+            simulation.prepareEdgeRouting();
+            link.attr("d", d => lineFunction(simulation.routeEdge(d)));
+            if (isIE()) link.each(function (d) { this.parentNode.insertBefore(this, this) });
+        }
         // Restart the simulation.
         simulation.links(links);    // Required because we create new link lists
-        simulation.start(10, 15, 20);
+        simulation.start(10, 15, 20).on("tick", function() {
+            node.each(d => {
+                    d.innerBounds = d.bounds.inflate(-margin);
+                })
+                .attr("transform", d => `translate(${d.innerBounds.x},${d.innerBounds.y})`);
+            node.select('rect')
+                .attr("width", d => d.innerBounds.width())
+                .attr("height", d => d.innerBounds.height());
+
+            link.attr("d", d => {
+                let route = cola.makeEdgeBetween(d.source.innerBounds, d.target.innerBounds, 5);
+                return lineFunction([route.sourceIntersection, route.arrowStart]);
+            });
+            if (isIE()) link.each(function (d) { this.parentNode.insertBefore(this, this) });
+
+        }).on("end", routeEdges);
+        function isIE() { return ((navigator.appName == 'Microsoft Internet Explorer') || ((navigator.appName == 'Netscape') && (new RegExp("Trident/.*rv:([0-9]{1,}[\.0-9]{0,})").exec(navigator.userAgent) != null))); }
     }
 
     // Helper function for updating links after node mutations.
