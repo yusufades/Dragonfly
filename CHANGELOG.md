@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+ - Edge Routing
  - Initial Node d3 mutation - addNode
  - Initial Node epic
  - Mock API 
