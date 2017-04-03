@@ -92,7 +92,7 @@ const graphFactory = (documentId) => {
         link = g.append("g")
                 .selectAll(".link"),
         node = g.append("g")
-                .selectAll(".node");
+                .selectAll(".node")
 
     /**
      * restart function adds and removes nodes.
@@ -104,39 +104,39 @@ const graphFactory = (documentId) => {
 
         node = node.data(nodes, d => d.index);
         node.exit().remove();
-        node = node.enter()
+        let nodeEnter = node.enter()
                    .append("g")
                    .each(d => {d.createMargin = false})
                    .classed("node", true)
                    .call(simulation.drag)
-                   .merge(node);
         
         // Here we add node beauty.
         // To fit nodes to the short-name calculate BBox
         // from https://bl.ocks.org/mbostock/1160929
-        let text = node.append("text")
+        let text = nodeEnter.append("text")
                     .attr("dy", 0)
                     .attr("text-anchor", "middle")
                     .style("font", "100 22px Helvetica Neue")
                     .text(d => d.shortname || d.hash)
+                    .each(function(d){
+                        if (d.createMargin){
+                            return
+                        }
+                        const b = this.getBBox();
+                        const extra = 2 * margin + 2 * pad;
+                        d.width = b.width + extra;
+                        d.height = b.height + extra;
+                        d.createMargin = !d.createMargin;
+                    })
                     .attr("x", 0)
                     .attr("y", 0/**d => d.y + (margin + pad) / 2**/);
         
         // This trick from http://stackoverflow.com/a/27076107
         // we get the bounding box from the parent (which contains the text)
+        node = node.merge(nodeEnter)
         node.insert("rect", "text")     // The second arg is what the rect will sit behind.
                 .classed("node", true)
                 .attr("fill", "red")
-                .each(function(d){
-                    if (d.createMargin){
-                        return
-                    }
-                    const b = this.parentNode.getBBox();
-                    const extra = 2 * margin + 2 * pad;
-                    d.width = b.width + extra;
-                    d.height = b.height + extra;
-                    d.createMargin = !d.createMargin;
-                })
                 .attr("width", d => d.width)
                 .attr("height", d => d.height)
             
