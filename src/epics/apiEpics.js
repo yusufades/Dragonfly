@@ -2,7 +2,7 @@ import * as Rx from 'rxjs';
 import { combineEpics } from 'redux-observable';
 
 import {FETCH_INITIAL_NODE, RECEIVE_INITIAL_NODE, receiveInitialNode} from '../actions/apiActions';
-import {REQUEST_SINKS, getSinks} from '../actions/dragonflyActions';
+import {REQUEST_SINKS, getSinks, REQUEST_SOURCES, getSources} from '../actions/dragonflyActions';
 import {addNode} from '../actions/d3actions';
 import rootApi from '../api/rootAPI';
 
@@ -25,10 +25,16 @@ const fetchSinks = action$ =>
         .mergeMap(({node}) => Rx.Observable.from(API.getAllChildren(node.hash)))
         .map(getSinks)
 
+const fetchSources = action$ =>
+    action$.ofType(REQUEST_SOURCES)
+        .mergeMap(({node}) => Rx.Observable.from(API.getAllParents(node.hash)))
+        .map(getSources)
+
 const apiEpics = combineEpics(
     fetchNode,
     receiveNode,
-    fetchSinks
+    fetchSinks,
+    fetchSources
 )
 
 export default apiEpics;

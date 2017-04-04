@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+ - Dragonfly sources
  - Dragonfly sinks
  - Select nodes into dragonfly
  - Graph callback for selecting nodes

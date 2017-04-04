@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 
-import {SELECT_NODE, GET_SINKS} from '../actions/dragonflyActions';
+import {SELECT_NODE, GET_SINKS, GET_SOURCES} from '../actions/dragonflyActions';
 
 /**
  * Reducer for selecting 
@@ -31,9 +31,24 @@ const sinksReducer = (sinks = [], action) => {
  */
 export const getSinks = state => state.dragonfly.sinks;
 
+const sourcesReducer = (sources = [], action) => {
+    switch (action.type){
+        case GET_SOURCES:
+            return [...action.nodes]
+        default:
+            return sources
+    }
+}
+
+/**
+ * Selector for the dragonfly sources.
+ */
+export const getSources = state => state.dragonfly.sources;
+
 const dragonflyReducer = combineReducers({
     selectedNode: selectedNodeReducer,
-    sinks: sinksReducer
+    sinks: sinksReducer,
+    sources: sourcesReducer
 })
 
 export default dragonflyReducer;

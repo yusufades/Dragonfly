@@ -101,7 +101,7 @@ const mockDB = (() => {
         },
         getStartNode: (nodeHash) => {
             return new Promise((resolve, reject) => {
-                resolve(JSON.parse(JSON.stringify(nodeA)));
+                resolve(JSON.parse(JSON.stringify(nodeB)));
             })
         }
     }

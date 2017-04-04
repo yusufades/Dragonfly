@@ -9,7 +9,8 @@ export const SELECT_NODE = "dragonflyActions/SELECT_NODE"
 
 export const REQUEST_SINKS = "dragonflyActions/REQUEST_SINKS"
 export const GET_SINKS = "dragonflyActions/GET_SINKS"
-const GET_SOURCES = "dragonflyActions/GET_SOURCES"
+export const REQUEST_SOURCES = "dragonflyActions/REQUEST_SOURCES"
+export const GET_SOURCES = "dragonflyActions/GET_SOURCES"
 
 /**
  * Select a node object - put it in the middle of the dragonfly.
@@ -30,10 +31,28 @@ export const getSinks = nodes => ({
 })
 
 /**
- * Request sinks for a node.
+ * Request sinks for a node - for dragonfly
  * @param {object} node 
  */
 export const requestSinks = node => ({
     type: REQUEST_SINKS,
+    node
+})
+
+/**
+ * get Sources for the dragonfly view
+ * @param {object[]} nodes 
+ */
+export const getSources = nodes => ({
+    type: GET_SOURCES,
+    nodes
+})
+
+/**
+ * Request Sources for a node - for dragonfly
+ * @param {object} node 
+ */
+export const requestSources = node => ({
+    type: REQUEST_SOURCES,
     node
 })

@@ -21,10 +21,11 @@ graph.setNodeToColor((node) => {
  * DRAGONFLY ONLY OPTIONS:
  * TODO: refactor somewhere else.
  */
-import {selectNode, requestSinks} from '../actions/dragonflyActions';
+import {selectNode, requestSinks, requestSources} from '../actions/dragonflyActions';
 graph.setSelectNode((node) => {
     window.store.dispatch(selectNode(node))
     window.store.dispatch(requestSinks(node))
+    window.store.dispatch(requestSources(node))
 })
 
 
