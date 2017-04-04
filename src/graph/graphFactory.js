@@ -93,14 +93,23 @@ const graphFactory = (documentId) => {
                 .attr("d", "M0,-5L10,0L0,5")
                 .attr("class","arrowHead");
     }
-    
-    
+
     // Define svg groups
     let g = svg.append("g"),
         link = g.append("g")
                 .selectAll(".link"),
         node = g.append("g")
-                .selectAll(".node")
+                .selectAll(".node");
+    
+    /**
+     * Add zoom/panning behaviour to svg.
+     */
+    svg.call(d3.zoom().on("zoom", zoomed));
+    function zoomed() {
+        g.attr("transform", d3.event.transform);
+    }
+    
+
 
     /**
      * restart function adds and removes nodes.

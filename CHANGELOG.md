@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+ - Zoom and panning
  - Dragonfly add triplet
  - Dragonfly sources
  - Dragonfly sinks
