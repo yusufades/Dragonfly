@@ -6,7 +6,7 @@ let levelgraph = require("levelgraph");
 let level = require("level-browserify");
 
 const mockDB = (() => {
-    let DB = levelgraph(level(`MockDB`));
+    let DB = levelgraph(level(`MockDB3`));
 
     /**
      * The below nodes match the following code:
@@ -49,9 +49,9 @@ const mockDB = (() => {
     nodeMap[nodeB.hash] = nodeB;
     nodeMap[nodeC.hash] = nodeC;
 
-    DB.put([{subject: nodeA.hash, predicate:"function", object: nodeB.hash},
-        {subject: nodeA.hash, predicate:"function", object: nodeC.hash},
-        {subject: nodeB.hash, predicate:"function", object: nodeC.hash}])
+    DB.put([{subject: nodeA.hash, predicate:"function", object: nodeB.hash, edge: {type: "function", value: 3}},
+        {subject: nodeA.hash, predicate:"function", object: nodeC.hash, edge: {type: "function", value: 3}},
+        {subject: nodeB.hash, predicate:"function", object: nodeC.hash, edge: {type: "function", value: 3}}])
 
     return {
         /**
@@ -70,8 +70,8 @@ const mockDB = (() => {
                     if (list.length === 0){
                         return resolve([])
                     }
-                    let childNodes = list.map(({predicate, object}) => ({
-                            predicate,
+                    let childNodes = list.map(({edge, object}) => ({
+                            predicate: edge,
                             ...nodeMap[object]
                     }))
                     return resolve(childNodes);
@@ -91,8 +91,8 @@ const mockDB = (() => {
                     if (list.length === 0){
                         return resolve([])
                     }
-                    let parentNodes = list.map(({predicate, subject}) => ({
-                            predicate,
+                    let parentNodes = list.map(({edge, subject}) => ({
+                            predicate: edge,
                             ...nodeMap[subject]
                     }))
                     return resolve(parentNodes);
