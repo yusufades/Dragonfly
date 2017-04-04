@@ -1,7 +1,6 @@
 
 #dragonfly {
     position: fixed;
-    overflow: hidden;
     display: block;
     height: 90px;
     width: 300px;
@@ -11,8 +10,20 @@
 
 #left, #center, #right {
     display: inline-block;
+    position: relative;
     width: 100px;
-    height: 30px;
+    height: auto;
     background-color: lightcyan;
+    overflow-x: auto;
 }
 
+#left {
+    left:0;
+}
+#center {
+    left:0;
+}
+#right {
+    left:0;
+    /** Using top the whole column shifts down*/
+}
