@@ -22,11 +22,17 @@ graph.setNodeToColor((node) => {
  * DRAGONFLY ONLY OPTIONS:
  * TODO: refactor somewhere else.
  */
-import {selectNode, requestSinks, requestSources} from '../actions/dragonflyActions';
-graph.setSelectNode((node) => {
+import {selectNode, requestSinks, requestSources, moveDragonfly, closeDragonfly, openDragonfly} from '../actions/dragonflyActions';
+graph.setSelectNode((node, coordinates) => {
     window.store.dispatch(selectNode(node))
     window.store.dispatch(requestSinks(node))
     window.store.dispatch(requestSources(node))
+    window.store.dispatch(moveDragonfly(coordinates[0], coordinates[1]))
+    window.store.dispatch(openDragonfly())
+})
+
+graph.setClickAway(() => {
+    window.store.dispatch(closeDragonfly());
 })
 
 

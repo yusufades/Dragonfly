@@ -2,9 +2,9 @@
  * These actions manipulate the dragonfly
  */
 
-const MOVE_DRAGONFLY = "dragonflyActions/MOVE_DRAGONFLY"
-const OPEN_DRAGONFLY = "dragonflyActions/OPEN_DRAGONFLY"
-const CLOSE_DRAGONFLY = "dragonflyActions/CLOSE_DRAGONFLY"
+export const MOVE_DRAGONFLY = "dragonflyActions/MOVE_DRAGONFLY"
+export const OPEN_DRAGONFLY = "dragonflyActions/OPEN_DRAGONFLY"
+export const CLOSE_DRAGONFLY = "dragonflyActions/CLOSE_DRAGONFLY"
 export const SELECT_NODE = "dragonflyActions/SELECT_NODE"
 
 export const REQUEST_SINKS = "dragonflyActions/REQUEST_SINKS"
@@ -55,4 +55,21 @@ export const getSources = nodes => ({
 export const requestSources = node => ({
     type: REQUEST_SOURCES,
     node
+})
+
+/**
+ * Moves dragonfly 
+ */
+export const moveDragonfly = (x, y) => ({
+    type: MOVE_DRAGONFLY,
+    x,
+    y
+})
+
+export const closeDragonfly = () => ({
+    type: CLOSE_DRAGONFLY
+})
+
+export const openDragonfly = () => ({
+    type: OPEN_DRAGONFLY
 })

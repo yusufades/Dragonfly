@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+ - Add open and close dragonfly
+ - Add move dragonfly
  - Add edges between visible nodes
  - Recenter graph
  - Zoom and panning

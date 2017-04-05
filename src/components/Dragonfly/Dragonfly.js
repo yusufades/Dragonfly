@@ -5,7 +5,7 @@ import './dragonfly.css';
 /**
  * Import actions here
  */
-import {getSelectedNode, getSinks, getSources} from '../../reducers/dragonflyReducer';
+import {getSelectedNode, getSinks, getSources, getDragonflyPosition, getDragonflyVisibility} from '../../reducers/dragonflyReducer';
 import {addTriplet} from '../../actions/d3actions';
 
 /**
@@ -19,7 +19,12 @@ const dragonfly = React.createClass({
         }
     },
     render: function(){
-        return <div id="dragonfly">
+        return <div id="dragonfly" style={{
+            left: this.props.position.x + 'px',
+            top: this.props.position.y + 'px',
+            display: this.props.isVisible ? "block" : "none"
+        }
+        }>
         <div id="left">
             <ul>{ this.props.sources.map(v =>
                 <li key={v.hash}
@@ -40,7 +45,9 @@ const dragonfly = React.createClass({
 const mapStateToProps = state => ({
     selectedNode: getSelectedNode(state),
     sinks: getSinks(state),
-    sources: getSources(state)
+    sources: getSources(state),
+    position: getDragonflyPosition(state),
+    isVisible: getDragonflyVisibility(state)
 });
 
 const mapDispatchToProps = dispatch => ({

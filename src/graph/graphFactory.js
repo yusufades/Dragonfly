@@ -28,6 +28,7 @@ const graphFactory = (documentId) => {
         // Set this as a function that transforms the node -> color string
         nodeToColor: undefined,
         clickNode: (node) => console.log("clicked", node),
+        clickAway: () => console.log("clicked away from stuff")
     }
 
     /**
@@ -38,6 +39,7 @@ const graphFactory = (documentId) => {
     let tripletsDB = levelgraph(level(`Userdb-${Math.random()*100}`));
     let nodes = [];
     let links = [];
+    let mouseCoordinates = [0, 0]
 
     const width = 900,
           height = 600,
@@ -52,7 +54,16 @@ const graphFactory = (documentId) => {
                 .attr("preserveAspectRatio", "xMinYMin meet")
                 .attr("viewBox", `0 0 ${width} ${height}`)
                 .classed("svg-content-responsive", true);
-
+    
+    /**
+     * Keep track of the mouse.
+     */
+    svg.on("mousemove", function() {
+        mouseCoordinates = d3.mouse(this)
+    })
+    svg.on("click", () => {
+        options.clickAway();
+    })
 
     /**
      * Set up [webcola](http://marvl.infotech.monash.edu/webcola/).
@@ -107,6 +118,7 @@ const graphFactory = (documentId) => {
     let zoom = d3.zoom().scaleExtent([0.1, 5]).on("zoom", zoomed);
     svg.call(zoom);
     function zoomed() {
+        options.clickAway();
         g.attr("transform", d3.event.transform);
     }
     
@@ -163,7 +175,13 @@ const graphFactory = (documentId) => {
         /**
          * Rebind the handlers on the nodes.
          */
-        node.on('click', options.clickNode)
+        node.on('click', function(node) {
+            // coordinates is a tuple: [x,y]
+            setTimeout(() => {
+                options.clickNode(node, mouseCoordinates)
+            }, 50)
+            
+        })
 
         /////// LINK ///////
         link = link.data(links, d => d.source.index + "-" + d.target.index)
@@ -442,7 +460,14 @@ const graphFactory = (documentId) => {
      */
     function recenterGraph(){
         svg.transition().duration(300).call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1))
-        
+    }
+
+    /**
+     * Replaces function to call when clicking away from a node.
+     * @param {function} clickAwayCallback 
+     */
+    function setClickAway(clickAwayCallback){
+        options.clickAway = clickAwayCallback;
     }
 
     return {
@@ -452,6 +477,7 @@ const graphFactory = (documentId) => {
         addNode,
         setNodeToColor,
         setSelectNode,
+        setClickAway,
         recenterGraph
     }
 }
