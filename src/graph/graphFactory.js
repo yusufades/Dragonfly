@@ -497,7 +497,6 @@ const graphFactory = (documentId) => {
         setSelectNode,
         setClickAway,
         recenterGraph,
-        setStrokeRules,
         setEdgeColor
     }
 }
