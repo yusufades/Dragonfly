@@ -7,12 +7,28 @@
 }
 
 #left, #center, #right {
-    display: inline-block;
+    display: block;
+    float: left;
     position: relative;
     width: 100px;
     height: auto;
     background-color: lightcyan;
     overflow-x: auto;
+}
+
+#left, #right{
+    position: relative;
+    overflow: auto;
+    max-height: 400px;
+}
+
+#left ul, #right ul{
+    padding: 0;
+}
+
+#left ul li, #right ul li {
+    list-style: none;
+    padding: 2px;
 }
 
 #left {
