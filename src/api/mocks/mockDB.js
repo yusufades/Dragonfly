@@ -4,54 +4,28 @@
 
 let levelgraph = require("levelgraph");
 let level = require("level-browserify");
+let d3 = require('d3');
+
+import {data} from './live-animal-trade-csv';
+
+let parsedData = d3.csvParse(data, function (d) {
+    return {
+        year: d.Year,
+        tradeFlow: d.TradeFlow,
+        value: d.TradeValueUS,
+        reporter: d.Reporter,
+        partner: d.Partner
+    }
+});
+
+parsedData = parsedData.filter(v => v.tradeFlow == "Export")
 
 const mockDB = (() => {
-    let DB = levelgraph(level(`MockDB3`));
+    let DB = levelgraph(level(`MockDB4`));
 
-    /**
-     * The below nodes match the following code:
-     * ```
-     * function a(){
-     *      c()
-     *      return b()
-     * }
-     * function b(){
-     *      c()
-     *      return 1
-     * }
-     * function c(){
-     *      return 0
-     * }
-     * ```
-     */
 
-    const nodeA = {hash: "function-a-start-end",
-                    kind: "function",
-                    start: {},
-                    end: {},
-                    shortname: "function a()"};
-    const nodeB = {hash: "function-b-start-end",
-                    kind: "function",
-                    start: {},
-                    end: {},
-                    shortname: "function b()"}
-    const nodeC = {hash: "function-c-start-end",
-                    kind: "function",
-                    start: {},
-                    end: {},
-                    shortname: "function c()"}
 
-    /**
-     * Store nodes based on hash.
-     */
-    const nodeMap = {}
-    nodeMap[nodeA.hash] = nodeA;
-    nodeMap[nodeB.hash] = nodeB;
-    nodeMap[nodeC.hash] = nodeC;
-
-    DB.put([{subject: nodeA.hash, predicate:"function", object: nodeB.hash, edge: {type: "function", value: 3}},
-        {subject: nodeA.hash, predicate:"function", object: nodeC.hash, edge: {type: "function", value: 3}},
-        {subject: nodeB.hash, predicate:"function", object: nodeC.hash, edge: {type: "function", value: 3}}])
+    DB.put(parsedData.map(v => ({predicate: v.tradeFlow, subject: v.reporter, object: v.partner, edge: {type: v.tradeFlow, value: v.value}})))
 
     return {
         /**
@@ -72,7 +46,7 @@ const mockDB = (() => {
                     }
                     let childNodes = list.map(({edge, object}) => ({
                             predicate: edge,
-                            ...nodeMap[object]
+                            hash: object
                     }))
                     return resolve(childNodes);
 
@@ -93,7 +67,7 @@ const mockDB = (() => {
                     }
                     let parentNodes = list.map(({edge, subject}) => ({
                             predicate: edge,
-                            ...nodeMap[subject]
+                            hash: subject
                     }))
                     return resolve(parentNodes);
                 })
@@ -101,7 +75,7 @@ const mockDB = (() => {
         },
         getStartNode: (nodeHash) => {
             return new Promise((resolve, reject) => {
-                resolve(JSON.parse(JSON.stringify(nodeB)));
+                resolve(JSON.parse(JSON.stringify({hash: "Australia"})));
             })
         }
     }
