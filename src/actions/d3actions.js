@@ -18,6 +18,7 @@ const REMOVE_TRIPLET = "d3actions/REMOVE_TRIPLET";
 const REMOVE_NODE = "d3actions/REMOVE_NODE";
 export const REMOVE_NODE_HASH = "d3actions/REMOVE_NODE_HASH";
 const REMOVE_ALL_NODES = "d3actions/REMOVE_ALL_NODES";
+export const ADD_EDGE = "d3actions/ADD_EDGE";
 
 /**
  * Adds a triplet to the d3 diagram.
@@ -38,6 +39,16 @@ export const addTriplet = (subject, predicate, object) => ({
     triplet: {subject, predicate, object},
     type: ADD_TRIPLET
 });
+
+/**
+ * Won't add nodes, will only add edges between existing nodes.
+ * @alias addTriplet
+ */
+export const addEdge = (subject, predicate, object) => ({
+    triplet: {subject, predicate, object},
+    type: ADD_EDGE
+});
+
 
 /**
  * Adds a single node onto the graph.

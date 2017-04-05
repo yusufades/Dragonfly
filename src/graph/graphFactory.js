@@ -249,14 +249,18 @@ const graphFactory = (documentId) => {
         createNewLinks();
     }
 
-    function addTriplet(tripletObject){
+    /**
+     * Validates triplets.
+     * @param {object} tripletObject 
+     */
+    function tripletValidation(tripletObject){
         /**
          * Check that minimum requirements are met.
          */
         if (tripletObject === undefined) {
             var e = new Error("TripletObject undefined");
             console.error(e);
-            return
+            return false
         }
 
         // Node needs a unique hash associated with it.
@@ -266,29 +270,41 @@ const graphFactory = (documentId) => {
 
         if (!(subject && predicate && object && true)){
             throw new Error("Triplets added need to include all three fields.")
+            return false
         }
 
         // Check that hash exists
         if (!(subject.hash && object.hash)) {
             var e = new Error("Subject and Object require a hash field.");
             console.error(e);
-            return
+            return false
         }
 
         // Check that type field exists on predicate
         if (!predicate.type) {
             var e = new Error("Predicate requires type field.");
             console.error(e);
-            return
+            return false
         }
 
         // Check that type field is a string on predicate
         if (typeof predicate.type !== "string") {
             var e = new Error("Predicate type field must be a string");
             console.error(e);
+            return false
+        }
+        return true
+    }
+
+    function addTriplet(tripletObject){
+        if (!tripletValidation(tripletObject)){
             return
         }
-        
+        // Node needs a unique hash associated with it.
+        let subject = tripletObject.subject,
+            predicate = tripletObject.predicate,
+            object = tripletObject.object;
+
         /**
          * If a predicate type already has a color,
          * it is not redefined.
@@ -329,6 +345,41 @@ const graphFactory = (documentId) => {
             createNewLinks();
         });
     }
+
+    function addEdge(triplet){
+        if (!tripletValidation(triplet)){
+            return
+        }
+        // Node needs a unique hash associated with it.
+        let subject = triplet.subject,
+            predicate = triplet.predicate,
+            object = triplet.object;
+        
+        if (!(nodeMap.has(subject.hash) && nodeMap.has(object.hash))){
+            // console.error("Cannot add edge between nodes that don't exist.")
+            return
+        }
+
+        /**
+         * Put the triplet into the LevelGraph database
+         * and mutates the d3 nodes and links list to
+         * visually pop on the node/s.
+         */
+        tripletsDB.put({
+            subject: subject.hash,
+            predicate: predicate.type,
+            object: object.hash,
+            edgeData: predicate
+        }, err => {
+            if (err){
+                throw new Error(err);
+            }
+
+            createNewLinks();
+        });
+
+    }
+
     /**
      * Removes the node and all triplets associated with it.
      * @param {String} nodeHash hash of the node to remove.
@@ -396,6 +447,7 @@ const graphFactory = (documentId) => {
 
     return {
         addTriplet,
+        addEdge,
         removeNode,
         addNode,
         setNodeToColor,

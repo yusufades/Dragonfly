@@ -1,7 +1,7 @@
 import * as Rx from 'rxjs';
 import { combineEpics } from 'redux-observable';
 
-import {ADD_TRIPLET, REMOVE_NODE_HASH, ADD_NODE} from '../actions/d3actions';
+import {ADD_TRIPLET, REMOVE_NODE_HASH, ADD_NODE, ADD_EDGE} from '../actions/d3actions';
 
 // We have to import and initiate the d3Graph here.
 import graphFactory from '../graph/graphFactory';
@@ -14,7 +14,7 @@ console.log(graph)
 graph.setNodeToColor((node) => {
     switch (node.kind){
         case "function":
-            return "blue"
+            return "aqua"
     }
 })
 
@@ -46,10 +46,16 @@ const removeNodeHash = action$ =>
         .do(({nodeHash}) => graph.removeNode(nodeHash))
         .mergeMap(_ => Rx.Observable.empty());
 
+const addEdge = action$ =>
+    action$.ofType(ADD_EDGE)
+        .do(({triplet}) => graph.addEdge(triplet))
+        .mergeMap(_ => Rx.Observable.empty());
+
 const d3epics = combineEpics(
     addNode,
     addTriplet,
-    removeNodeHash
+    removeNodeHash,
+    addEdge
 );
 
 export default d3epics;
