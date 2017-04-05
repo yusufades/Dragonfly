@@ -28,7 +28,8 @@ const graphFactory = (documentId) => {
         // Set this as a function that transforms the node -> color string
         nodeToColor: undefined,
         clickNode: (node) => console.log("clicked", node),
-        clickAway: () => console.log("clicked away from stuff")
+        clickAway: () => console.log("clicked away from stuff"),
+        strokeThickness: () => 3
     }
 
     /**
@@ -190,7 +191,7 @@ const graphFactory = (documentId) => {
         link = link.enter()
                    .append("path")
                    .attr("class", "line")
-                   .attr("stroke-width", 2)
+                   .attr("stroke-width", options.strokeThickness)
                    .attr("stroke", d => predicateTypeToColorMap.get(d.edgeData.type) || "black")
                    .attr("fill", "none")
                    .attr("marker-end",d => `url(#arrow-${predicateTypeToColorMap.get(d.edgeData.type)})`)   // This needs to change to the color.
@@ -470,6 +471,14 @@ const graphFactory = (documentId) => {
         options.clickAway = clickAwayCallback;
     }
 
+    /**
+     * Sets function for setting the edge thickness.
+     * @param {function: link -> number} strokeThickness 
+     */
+    function setStrokeRules(strokeThickness){
+        options.strokeThickness = strokeThickness;
+    }
+
     return {
         addTriplet,
         addEdge,
@@ -478,7 +487,8 @@ const graphFactory = (documentId) => {
         setNodeToColor,
         setSelectNode,
         setClickAway,
-        recenterGraph
+        recenterGraph,
+        setStrokeRules
     }
 }
 
