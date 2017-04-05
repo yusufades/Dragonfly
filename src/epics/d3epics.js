@@ -8,6 +8,7 @@ import graphFactory from '../graph/graphFactory';
 
 const graph = graphFactory("d3-graph");
 
+console.log(graph)
 // MOCK OPTIONS
 // TODO: MOCK - change.
 graph.setNodeToColor((node) => {

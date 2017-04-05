@@ -104,7 +104,8 @@ const graphFactory = (documentId) => {
     /**
      * Add zoom/panning behaviour to svg.
      */
-    svg.call(d3.zoom().on("zoom", zoomed));
+    let zoom = d3.zoom().scaleExtent([0.1, 5]).on("zoom", zoomed);
+    svg.call(zoom);
     function zoomed() {
         g.attr("transform", d3.event.transform);
     }
@@ -385,13 +386,21 @@ const graphFactory = (documentId) => {
         options.clickNode = selectNodeFunc;
     }
 
+    /**
+     * Invoking this function will recenter the graph.
+     */
+    function recenterGraph(){
+        svg.transition().duration(300).call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1))
+        
+    }
 
     return {
         addTriplet,
         removeNode,
         addNode,
         setNodeToColor,
-        setSelectNode
+        setSelectNode,
+        recenterGraph
     }
 }
 
