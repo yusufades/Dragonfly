@@ -35,7 +35,6 @@ ReactDOM.render(
   <Provider store={store}>
     <div>
     <Dragonfly />
-    <DevDock />
     </div>
   </Provider>,
   document.getElementById('root')

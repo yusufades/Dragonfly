@@ -8,16 +8,6 @@ import graphFactory from '../graph/graphFactory';
 
 const graph = graphFactory("d3-graph");
 
-console.log(graph)
-// MOCK OPTIONS
-// TODO: MOCK - change.
-// graph.setNodeToColor((node) => {
-//     switch (node.kind){
-//         case "function":
-//             return "aqua"
-//     }
-// })
-
 /**
  * DRAGONFLY ONLY OPTIONS:
  * TODO: refactor somewhere else.
@@ -36,6 +26,19 @@ graph.setClickAway(() => {
 })
 graph.setStrokeRules((d) => {
     return Number(d.edgeData.value) / 91128858;
+})
+
+graph.setEdgeColor((predicateType) => {
+    switch(predicateType){
+        case "Export":
+            return "red"
+        case "Import":
+            return "blue"
+        case "Re-Import":
+            return "purple"
+        default:
+            return "pink"
+    }
 })
 
 

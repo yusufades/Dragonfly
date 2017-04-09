@@ -196,6 +196,7 @@ const graphFactory = (documentId) => {
                    .attr("stroke", d => predicateTypeToColorMap.get(d.edgeData.type) || "black")
                    .attr("fill", "none")
                    .attr("marker-end",d => `url(#arrow-${predicateTypeToColorMap.get(d.edgeData.type)})`)   // This needs to change to the color.
+                   .attr("markerUnits", options.strokeThickness)
                    .merge(link);
         
         /**
@@ -473,7 +474,6 @@ const graphFactory = (documentId) => {
     }
 
     /**
-<<<<<<< HEAD
      * Function called when choosing edge color based on predicate.
      * @param {function} edgeColorCallback takes string 'predicate.type' to a color.
      */
@@ -482,8 +482,6 @@ const graphFactory = (documentId) => {
     }
 
     /**
-=======
->>>>>>> 3be49c8bfdd60e2eb8a67626f14a954f362987f0
      * Sets function for setting the edge thickness.
      * @param {function: link -> number} strokeThickness 
      */
