@@ -1,0 +1,16 @@
+
+.typeList {
+    background-color: #ddddff;
+}
+
+.typeList ul {
+    display: none;
+}
+
+.typeList:hover > ul {
+    position: absolute;
+    display: block;
+    left: -100px;
+    top: 0px;
+    width: 100px;
+}

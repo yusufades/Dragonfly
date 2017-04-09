@@ -13,12 +13,10 @@
     width: 100px;
     height: auto;
     background-color: lightcyan;
-    overflow-x: auto;
 }
 
 #left, #right{
     position: relative;
-    overflow: auto;
     max-height: 400px;
 }
 
