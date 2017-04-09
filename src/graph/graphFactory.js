@@ -473,6 +473,7 @@ const graphFactory = (documentId) => {
     }
 
     /**
+<<<<<<< HEAD
      * Function called when choosing edge color based on predicate.
      * @param {function} edgeColorCallback takes string 'predicate.type' to a color.
      */
@@ -481,6 +482,8 @@ const graphFactory = (documentId) => {
     }
 
     /**
+=======
+>>>>>>> 3be49c8bfdd60e2eb8a67626f14a954f362987f0
      * Sets function for setting the edge thickness.
      * @param {function: link -> number} strokeThickness 
      */
