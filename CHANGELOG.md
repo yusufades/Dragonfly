@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+ - Added DragonflyTypeList to group predicate types
  - Add open and close dragonfly
  - Add move dragonfly
  - Add edges between visible nodes

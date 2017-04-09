@@ -5,8 +5,12 @@ import './dragonfly.css';
 /**
  * Import actions here
  */
-import {getSelectedNode, getSinks, getSources, getDragonflyPosition, getDragonflyVisibility} from '../../reducers/dragonflyReducer';
+import {getSelectedNode, getSinks, getSources,
+    getDragonflyPosition, getDragonflyVisibility,
+    getSinksPredicates, getSourcePredicates} from '../../reducers/dragonflyReducer';
 import {addTriplet} from '../../actions/d3actions';
+
+import DragonflyTypeList from '../DragonflyTypeList/DragonflyTypeList';
 
 /**
  * Todo: Add verification that predicate value exists.
@@ -26,13 +30,12 @@ const dragonfly = React.createClass({
         }
         }>
         <div id="left">
-            <ul>{ this.props.sources.map(v =>
-                <li key={v.hash}
-                    onClick={
-                        () => {this.props.addTriplet(v, v.predicate, this.props.selectedNode)}
-                    }>
-                    {v.hash}
-                </li>)}
+            <ul>{ this.props.sourceTypes.map(type =>
+                    <DragonflyTypeList 
+                     type={type} 
+                     nodes={this.props.sources(type)}
+                     clickHandler={node => {this.props.addTriplet(node, node.predicate, this.props.selectedNode)}}/>
+                )}
             </ul>
         </div>
         <div id="center" key="2">{ this.props.selectedNode.hash }</div>
@@ -45,7 +48,8 @@ const dragonfly = React.createClass({
 const mapStateToProps = state => ({
     selectedNode: getSelectedNode(state),
     sinks: getSinks(state),
-    sources: getSources(state),
+    sources: type => getSources(state, type),
+    sourceTypes: getSourcePredicates(state),
     position: getDragonflyPosition(state),
     isVisible: getDragonflyVisibility(state)
 });

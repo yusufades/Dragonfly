@@ -1,5 +1,7 @@
 import {combineReducers} from 'redux';
 
+import * as _ from "underscore";
+
 import {SELECT_NODE, GET_SINKS, GET_SOURCES, MOVE_DRAGONFLY, OPEN_DRAGONFLY, CLOSE_DRAGONFLY} from '../actions/dragonflyActions';
 
 /**
@@ -31,6 +33,11 @@ const sinksReducer = (sinks = [], action) => {
  */
 export const getSinks = state => state.dragonfly.sinks;
 
+/**
+ * Selector for getting the different types
+ */
+export const getSinksPredicates = state => _.uniq(state.dragonfly.sinks.predicate.type, false);
+
 const sourcesReducer = (sources = [], action) => {
     switch (action.type){
         case GET_SOURCES:
@@ -42,8 +49,20 @@ const sourcesReducer = (sources = [], action) => {
 
 /**
  * Selector for the dragonfly sources.
+ * Optionally filter for only the predicate type.
  */
-export const getSources = state => state.dragonfly.sources;
+export const getSources = (state, type) => (state.dragonfly.sources)
+                                                .filter(node => {
+                                                    if (type === undefined){
+                                                        return true
+                                                    }
+                                                    return type === node.predicate.type;
+                                                });
+
+/**
+ * Selector for getting the different types
+ */
+export const getSourcePredicates = state => _.uniq(getSources(state).map(v => v.predicate.type), false);
 
 /**
  * 
