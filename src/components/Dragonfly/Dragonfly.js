@@ -34,20 +34,33 @@ const dragonfly = React.createClass({
                     <DragonflyTypeList 
                      type={type} 
                      nodes={this.props.sources(type)}
-                     clickHandler={node => {this.props.addTriplet(node, node.predicate, this.props.selectedNode)}}/>
+                     clickHandler={node => {this.props.addTriplet(node, node.predicate, this.props.selectedNode)}}
+                     floatLeft={true}
+                     />
+                     
                 )}
             </ul>
         </div>
         <div id="center" key="2">{ this.props.selectedNode.hash }</div>
-        <div id="right"><ul>{ this.props.sinks.map(v => <li key={v.hash}
-                    onClick={() => {this.props.addTriplet(this.props.selectedNode, v.predicate, v)}}>{v.hash}</li>)}</ul></div>
+        <div id="right">
+                <ul>{ this.props.sinkTypes.map(type =>
+                    <DragonflyTypeList 
+                     type={type} 
+                     nodes={this.props.sinks(type)}
+                     clickHandler={node => {this.props.addTriplet(this.props.selectedNode, node.predicate, node)}}
+                     floatLeft={false}
+                     />
+                )}
+            </ul>
+            </div>
         </div>
     }
 });
 
 const mapStateToProps = state => ({
     selectedNode: getSelectedNode(state),
-    sinks: getSinks(state),
+    sinks: type => getSinks(state, type),
+    sinkTypes: getSinksPredicates(state),
     sources: type => getSources(state, type),
     sourceTypes: getSourcePredicates(state),
     position: getDragonflyPosition(state),

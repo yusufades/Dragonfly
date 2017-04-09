@@ -12,9 +12,12 @@ const DragonflyTypeList = (props) => {
     if (!props.clickHandler){
         console.error("No props.clickHandler")
     }
+    if (!props.floatLeft){
+        console.error("No props.floatLeft")
+    }
     return (<li key={props.type} className="typeList">
                     {props.type}
-                    <ul>{
+                    <ul style={props.floatLeft ? {left: "-100px"}:{left: "100px"}}>{
                         props.nodes.map(v => <li key={v.hash}
                             onClick={() => props.clickHandler(v)}>
                                 {v.hash}

@@ -4,6 +4,7 @@
     display: block;
     height: 90px;
     width: 300px;
+    cursor: default;
 }
 
 #left, #center, #right {

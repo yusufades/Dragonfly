@@ -5,12 +5,20 @@
 
 .typeList ul {
     display: none;
-}
-
-.typeList:hover > ul {
     position: absolute;
-    display: block;
+    background-color: #eeeeff;
     left: -100px;
     top: 0px;
     width: 100px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.typeList ul li:hover {
+    background-color: #ddddff;
+    cursor: pointer;
+}
+
+.typeList:hover > ul {
+    display: block;
 }

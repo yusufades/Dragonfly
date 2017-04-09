@@ -30,13 +30,20 @@ const sinksReducer = (sinks = [], action) => {
 
 /**
  * Selector for the dragonfly sinks.
+ * Optional input for filtering by type.
  */
-export const getSinks = state => state.dragonfly.sinks;
-
+export const getSinks = (state, type) => (state.dragonfly.sinks)
+                                            .filter(node => {
+                                                if (type === undefined){
+                                                    return true
+                                                }
+                                                return type === node.predicate.type;
+                                            });
+                                                
 /**
  * Selector for getting the different types
  */
-export const getSinksPredicates = state => _.uniq(state.dragonfly.sinks.predicate.type, false);
+export const getSinksPredicates = state => _.uniq(getSinks(state).map(v => v.predicate.type), false);
 
 const sourcesReducer = (sources = [], action) => {
     switch (action.type){
