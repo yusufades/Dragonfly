@@ -11,12 +11,12 @@ const graph = graphFactory("d3-graph");
 console.log(graph)
 // MOCK OPTIONS
 // TODO: MOCK - change.
-graph.setNodeToColor((node) => {
-    switch (node.kind){
-        case "function":
-            return "aqua"
-    }
-})
+// graph.setNodeToColor((node) => {
+//     switch (node.kind){
+//         case "function":
+//             return "aqua"
+//     }
+// })
 
 /**
  * DRAGONFLY ONLY OPTIONS:
@@ -33,6 +33,9 @@ graph.setSelectNode((node, coordinates) => {
 
 graph.setClickAway(() => {
     window.store.dispatch(closeDragonfly());
+})
+graph.setStrokeRules((d) => {
+    return Number(d.edgeData.value) / 91128858;
 })
 
 
