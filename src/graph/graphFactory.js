@@ -28,7 +28,8 @@ const graphFactory = (documentId) => {
         // Set this as a function that transforms the node -> color string
         nodeToColor: undefined,
         clickNode: (node) => console.log("clicked", node),
-        clickAway: () => console.log("clicked away from stuff")
+        clickAway: () => console.log("clicked away from stuff"),
+        edgeColor: () => "black"
     }
 
     /**
@@ -328,10 +329,10 @@ const graphFactory = (documentId) => {
          * it is not redefined.
          */
         if (!predicateTypeToColorMap.has(predicate.type)){
-            predicateTypeToColorMap.set(predicate.type, predicate.color);
+            predicateTypeToColorMap.set(predicate.type, options.edgeColor(predicate.type));
 
             // Create an arrow head for the new color
-            createColorMarker(defs, predicate.color);
+            createColorMarker(defs, options.edgeColor(predicate.type));
         }
 
         /**
@@ -468,6 +469,14 @@ const graphFactory = (documentId) => {
      */
     function setClickAway(clickAwayCallback){
         options.clickAway = clickAwayCallback;
+    }
+
+    /**
+     * Function called when choosing edge color based on predicate.
+     * @param {function} edgeColorCallback takes string 'predicate.type' to a color.
+     */
+    function setEdgeColor(edgeColorCallback){
+        options.edgeColor = edgeColorCallback;
     }
 
     return {
