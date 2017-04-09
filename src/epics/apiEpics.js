@@ -47,9 +47,11 @@ const onAddTripletAddEdge = action$ =>
                                     .map(v => addEdge(v, v.predicate, triplet.subject)),
                                 Rx.Observable.from(API.getAllChildren(triplet.subject.hash))
                                     .flatMap(v => v)
+                                    .filter(v => triplet.subject.hash !== v.hash)
                                     .map(v => addEdge(triplet.subject, v.predicate, v)),
                                 Rx.Observable.from(API.getAllParents(triplet.object.hash))
                                     .flatMap(v => v)
+                                    .filter(v => triplet.object.hash !== v.hash)
                                     .map(v => addEdge(v, v.predicate, triplet.object)),
                                 Rx.Observable.from(API.getAllChildren(triplet.object.hash))
                                     .flatMap(v => v)
