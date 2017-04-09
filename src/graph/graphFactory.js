@@ -168,7 +168,7 @@ const graphFactory = (documentId) => {
 
         nodeEnter.insert("rect", "text")     // The second arg is what the rect will sit behind.
                 .classed("node", true)
-                .attr("fill", d => options.nodeToColor && options.nodeToColor(d) || "red")
+                .attr("fill", (d, i) => options.nodeToColor && options.nodeToColor(d) || d3.schemeCategory20c[i % 20])
                 .attr("rx", 5)
                 .attr("ry", 5);
         
