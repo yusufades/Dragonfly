@@ -5,6 +5,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 > Interactive directed graph explorer.
 
 
+TODO LIST
+
+ - Remember to prevent multiple edges between the same two nodes (when connecting edges)
 
 
 
