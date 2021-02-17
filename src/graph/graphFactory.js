@@ -8,7 +8,7 @@
 let d3 = require("d3");
 let cola = require("./vendor/cola.min.js");
 let levelgraph = require("levelgraph");
-let level = require("level-browserify");
+let level = require("level");
 
 /**
  * Factory for creating the graph.

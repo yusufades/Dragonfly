@@ -3,7 +3,7 @@
  */
 
 let levelgraph = require("levelgraph");
-let level = require("level-browserify");
+let level = require("level");
 
 const mockDB = (() => {
     let DB = levelgraph(level(`MockDB3`));
