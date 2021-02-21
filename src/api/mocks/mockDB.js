@@ -24,34 +24,56 @@ const mockDB = (() => {
      * }
      * ```
      */
+    const partFactory = (shortname, inBool) => ({
+        hash: shortname,
+        kind: !inBool? "function" : "other",
+        start: {},
+        end: {},
+        shortname
+    })
 
-    const nodeA = {hash: "function-a-start-end",
-                    kind: "function",
-                    start: {},
-                    end: {},
-                    shortname: "function a()"};
-    const nodeB = {hash: "function-b-start-end",
-                    kind: "function",
-                    start: {},
-                    end: {},
-                    shortname: "function b()"}
-    const nodeC = {hash: "function-c-start-end",
-                    kind: "function",
-                    start: {},
-                    end: {},
-                    shortname: "function c()"}
+    const inParts = ["seat", "fuel_tank", "engine", "propeller", "cargo"]
+        .map(name => partFactory(name, true))
+
+    const outParts = ["fuselage", "wing", "door", "tail", "rudder", "elevator", "flap", "winglet"]
+        .map(name => partFactory(name, false))
+    const parts = inParts.concat(outParts)
 
     /**
      * Store nodes based on hash.
      */
-    const nodeMap = {}
-    nodeMap[nodeA.hash] = nodeA;
-    nodeMap[nodeB.hash] = nodeB;
-    nodeMap[nodeC.hash] = nodeC;
+    const nodeMap = parts.reduce((acc, curr) => {
+        acc[curr.hash] = curr
+        return acc
+    }, {});
+    const p = Object.entries(nodeMap)
+        .reduce((acc, [_,curr]) => {
+            acc[curr.shortname] = curr.hash
+            return acc
+        }, {});
+    const fuselage = nodeMap[p.fuselage]
 
-    DB.put([{subject: nodeA.hash, predicate:"function", object: nodeB.hash, edge: {type: "function", value: 3}},
-        {subject: nodeA.hash, predicate:"function", object: nodeC.hash, edge: {type: "function", value: 3}},
-        {subject: nodeB.hash, predicate:"function", object: nodeC.hash, edge: {type: "function", value: 3}}])
+    const edges = [
+        {t: "bodyPart", s: p.fuselage, e: p.wing},
+        {t: "bodyPart", s: p.fuselage, e: p.door},
+        {t: "bodyPart", s: p.fuselage, e: p.tail},
+        {t: "mechPart", s: p.fuselage, e: p.seat},
+        {t: "mechPart", s: p.fuselage, e: p.cargo},
+        {t: "bodyPart", s: p.wing, e: p.flap},
+        {t: "bodyPart", s: p.wing, e: p.winglet},
+        {t: "mechPart", s: p.wing, e: p.fuel_tank},
+        {t: "mechPart", s: p.wing, e: p.engine},
+        {t: "bodyPart", s: p.tail, e: p.rudder},
+        {t: "bodyPart", s: p.tail, e: p.elevator},
+        {t: "bodyPart", s: p.tail, e: p.elevator},
+        {t: "mechPart", s: p.fuel_tank, e: p.engine},
+        {t: "mechPart", s: p.engine, e: p.propeller},
+    ]
+    DB.put(edges.map(({s,e,t})=>({subject: s, predicate:"function", object: e, edge:{type: t, value: 3}})))
+
+    // DB.put([{subject: nodeA.hash, predicate:"function", object: nodeB.hash, edge: {type: "function", value: 3}},
+    //     {subject: nodeA.hash, predicate:"function", object: nodeC.hash, edge: {type: "cat", value: 3}},
+    //     {subject: nodeB.hash, predicate:"function", object: nodeC.hash, edge: {type: "function", value: 3}}])
 
     return {
         /**
@@ -101,7 +123,7 @@ const mockDB = (() => {
         },
         getStartNode: (nodeHash) => {
             return new Promise((resolve, reject) => {
-                resolve(JSON.parse(JSON.stringify(nodeB)));
+                resolve(JSON.parse(JSON.stringify(fuselage)));
             })
         }
     }
